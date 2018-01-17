@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="res\c4d_symbols.h">
+      <Filter>res\StringTables</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_Globals.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_MainUI.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_Solid.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_World.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_VMF.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_Map.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="source\SX_Plane.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{21a218e2-f687-4906-8b93-aedf826630e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{92478910-daa5-46dd-b707-d2c8537bfd0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\dialogs">
+      <UniqueIdentifier>{8ac786dc-115c-4560-9c22-4fd9266814e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\StringTables">
+      <UniqueIdentifier>{51861371-cd48-4ba2-82fc-7f6e42740097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\StringTables\strings_us">
+      <UniqueIdentifier>{98309046-66ff-4b39-ba62-decb0fd603fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="res\StringTables\strings_us\dialogs">
+      <UniqueIdentifier>{7ad31247-6435-4ba0-b003-29c9ac5db11c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\strings_us\c4d_strings.str">
+      <Filter>res\StringTables\strings_us</Filter>
+    </None>
+    <None Include="res\strings_us\dialogs\DLG_MAINUI.str">
+      <Filter>res\StringTables\strings_us\dialogs</Filter>
+    </None>
+    <None Include="res\dialogs\DLG_MAINUI.res">
+      <Filter>res\dialogs</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_MainUI.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_Solid.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_World.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_VMF.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_Map.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\SX_Plane.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

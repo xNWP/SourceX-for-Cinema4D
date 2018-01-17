@@ -1,0 +1,13 @@
+STRINGTABLE
+{
+	IDS_PLUGIN_NAME		"SourceX";
+	IDS_PLUGIN_VERSION	"0.50 [dev]";
+	IDS_PLUGIN_DESCRIPTION	"Imports Valve Map Files (.vmf)";
+	IDS_BAD_MAP_FILE	"Error: Invalid map file, please select a valid Valve Map File (.vmf)";
+	IDS_LOAD_FILE_TITLE	"Please select the Valve Map File (*.vmf) to import...";
+	IDS_FILE_LOAD_ERROR	"There was an unexpected error trying to read the file: ";
+	IDS_PROCESSING_FILE	"Reading map: ";
+	IDS_PROCESSING_WORLD	"Reading world data: ";
+	IDS_OF				" of ";
+	IDS_BUILDING_POLY	"Bulding polygon ";
+}

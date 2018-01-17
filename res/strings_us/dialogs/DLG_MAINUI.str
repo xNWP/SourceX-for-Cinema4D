@@ -1,0 +1,9 @@
+DIALOGSTRINGS DLG_MAINUI
+{
+	DIALOG_TITLE	"SourceX";
+	T_CHOOSE_FILE	"Choose the *.vmf file to import:";
+	T_BROWSE_BIG	"";
+	T_BROWSE_SMALL	"Browse";
+	T_IMPORT		"Import";
+	T_PLANE_SEARCH_EPSILON	"Plane vertex search factor: ";
+}
