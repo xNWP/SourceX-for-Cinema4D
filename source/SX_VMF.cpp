@@ -221,10 +221,9 @@ void ClassBounds(std::vector<String> &data, String searchclass, int &start, int 
 	}
 }
 
-// Takes a solid, returns a list of lists that contain points needed to make a polygon.
-std::vector<std::vector<Vector>>& CreatePolyList(const SX_Solid &solid, const Int32 &Iepsilon)
+// Takes a solid, fills each plane with points needed to make that polygon.
+void GetVertices(SX_Solid &solid, const Int32 &Iepsilon)
 {
-	std::vector<std::vector<Vector>> *polygons = new std::vector<std::vector<Vector>>();
 	std::vector<Vector> ValidVertices;
 	
 	Float64 epsilon = Pow(10.0, Iepsilon);
@@ -243,38 +242,25 @@ std::vector<std::vector<Vector>>& CreatePolyList(const SX_Solid &solid, const In
 	// Check each plane to see if they contain valid vertices
 	for (int i = 0; i < solid.Planes.size(); i++)
 	{
-		std::vector<Vector> polygon;
-		polygon.clear();
+		if (solid.HasDisp && !(solid.Planes[i].IsDisp))
+			continue; // no need to do calculations on non-drawn poly's
+
 		for (int j = 0; j < ValidVertices.size(); j++)
 		{
 			Vector64 vec = ValidVertices[j] - solid.Planes[i].x;
 			Float64 evald = Dot(vec, solid.Planes[i].normal);
 			if ((evald < epsilon) && (evald > -epsilon)) // I'm using an epsilon here to help mitigate rounding errors.
 			{
-				polygon.push_back(ValidVertices[j]); // Found a point on the plane
+				solid.Planes[i].vertices.push_back(ValidVertices[j]); // Found a point on the plane
 			}
 		}
 
 		// Order list by angle to avoid lines intersecting
-		if (polygon.size() > 2) // bad poly otherwise!
+		if (solid.Planes[i].vertices.size() > 2) // bad poly otherwise!
 		{
-			polygon = OrderByAngle(solid.Planes[i], polygon);
-			
-			// check that this is not a duplicate of another face
-			bool bOk = true;
-			for (int i = 0; i < polygons->size(); i++)
-			{
-				if (polygon == (*polygons)[i])
-				{ bOk = false; break; }
-			}
-			if (!bOk)
-				continue;
-			else
-				polygons->push_back(polygon);
+			OrderByAngle(solid.Planes[i]);
 		}
 	}
-
-	return *polygons;
 }
 
 Bool VectorInList(const Vector &vec, const std::vector<Vector> &list)
@@ -295,26 +281,24 @@ Float32 Distance(const Vector &v1, const Vector &v2)
 }
 
 // Organizes a polygons vertices by angle about center point
-std::vector<Vector>& OrderByAngle(const SX_Plane &plane, const std::vector<Vector> &points)
+void OrderByAngle(SX_Plane &plane)
 {
 	// TO-DO: Order by distance secondarily :ssss
-	std::vector<Vector> *rval = new std::vector<Vector>();
-
 	Vector C(0, 0, 0);
 
 	// get the center point
-	for (int i = 0; i < points.size(); i++)
+	for (int i = 0; i < plane.vertices.size(); i++)
 	{
-		C.x += points[i].x;
-		C.y += points[i].y;
-		C.z += points[i].z;
+		C.x += plane.vertices[i].x;
+		C.y += plane.vertices[i].y;
+		C.z += plane.vertices[i].z;
 	}
-	C = C / points.size();
+	C = C / plane.vertices.size();
 
 	std::vector<Vector> nPoints; // move the plane to the origin
-	for (int i = 0; i < points.size(); i++)
+	for (int i = 0; i < plane.vertices.size(); i++)
 	{
-		Vector nVec(points[i].x - C.x, points[i].y - C.y, points[i].z - C.z);
+		Vector nVec(plane.vertices[i].x - C.x, plane.vertices[i].y - C.y, plane.vertices[i].z - C.z);
 		nPoints.push_back(nVec);
 	}
 
@@ -343,14 +327,15 @@ std::vector<Vector>& OrderByAngle(const SX_Plane &plane, const std::vector<Vecto
 
 	// load up map with angles and points
 	std::multimap<Float64, Vector> AnglePoints;
-	for (int i = 0; i < points.size(); i++)
-		AnglePoints.emplace(angles[i], points[i]); // this will auto-sort
+	for (int i = 0; i < plane.vertices.size(); i++)
+		AnglePoints.emplace(angles[i], plane.vertices[i]); // this will auto-sort
 
-	// push ordered values into return vector
+	// push ordered values into new vector
+	std::vector<Vector> newVerts;
 	for (std::map<Float64, Vector>::iterator i = AnglePoints.begin(); i != AnglePoints.end(); i++)
-		rval->push_back(i->second);
+		newVerts.push_back(i->second);
 
-	return *rval;
+	plane.vertices = newVerts;
 }
 
 // Lists points with identical positions in 3d space

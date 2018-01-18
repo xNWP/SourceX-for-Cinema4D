@@ -67,6 +67,7 @@ Bool SX_Map::CreateWorld(BaseDocument *doc, BaseObject *parent, const Int32 &Sea
 
 		if (World->m_Solids[i].HasDisp) // Displacement, seperate procedure.
 		{
+			GetVertices(World->m_Solids[i], SearchEpsilon);
 			for (Int32 j = 0; j < World->m_Solids[i].Planes.size(); j++) // For each face
 			{
 				if (World->m_Solids[i].Planes[j].IsDisp == false) // skip non-disp faces
@@ -75,31 +76,39 @@ Bool SX_Map::CreateWorld(BaseDocument *doc, BaseObject *parent, const Int32 &Sea
 				Int32 RowColCount = Pow(2.0, World->m_Solids[i].Planes[j].power);
 				Int32 RowColPointCount = RowColCount + 1;
 
-				Vector SP = World->m_Solids[i].Planes[j].startposition;
-				Vector X = World->m_Solids[i].Planes[j].x;
-				Vector Y = World->m_Solids[i].Planes[j].y;
-				Vector Z = World->m_Solids[i].Planes[j].z;
+				// Find start position (bottom left corner)
+				Int32 iSP = 0;
+				while (iSP < World->m_Solids[i].Planes[j].vertices.size())
+				{
+					if (World->m_Solids[i].Planes[j].vertices[iSP] == World->m_Solids[i].Planes[j].startposition)
+						break;
+					else
+						iSP++;
+				}
 
-				for (Int32 R = 0; R < RowColPointCount; R++) // For Each Row
+				// Modulate around list size negatively (since angles will be ccw)
+				Vector SP = World->m_Solids[i].Planes[j].vertices[iSP];
+				Vector X = World->m_Solids[i].Planes[j].vertices[(iSP - 1) % World->m_Solids[i].Planes[j].vertices.size()];
+				Vector Y = World->m_Solids[i].Planes[j].vertices[(iSP - 2) % World->m_Solids[i].Planes[j].vertices.size()];
+				Vector Z = World->m_Solids[i].Planes[j].vertices[(iSP - 3) % World->m_Solids[i].Planes[j].vertices.size()];
+
+				for (Int32 R = 0; R < RowColCount; R++) // For Each Row
 				{
 					Vector REndPoint = Z + ((1.0 * R / RowColCount) * (Y - Z));
 					Vector RStartPoint = SP + ((1.0 * R / RowColCount) * (X - SP));
 					Vector RowTravelVector = REndPoint - RStartPoint;
 
-					Vector R2EndPoint = Z + ((R + 1.0 / RowColCount) * (Y - Z));
-					Vector R2StartPoint = SP + ((R + 1.0 / RowColCount) * (X - SP));
+					Vector R2EndPoint = Z + (((R + 1.0) / RowColCount) * (Y - Z));
+					Vector R2StartPoint = SP + (((R + 1.0) / RowColCount) * (X - SP));
 					Vector Row2TravelVector = R2EndPoint - R2StartPoint;
 
-					for (Int32 C = 0; C < RowColPointCount; C++) // For Each Col
+					for (Int32 C = 0; C < RowColCount; C++) // For Each Col
 					{
-						Vector CEndPoint = X + ((1.0 * C / RowColCount) * (Y - X));
-						Vector CStartPoint = SP + ((1.0 * C / RowColCount) * (Z - SP));
-						Vector ColTravelVector = CEndPoint - CStartPoint;
-
-						Vector a = SP + ((1.0 * C / RowColPointCount) * RowTravelVector) + (((R * 1.0) / RowColPointCount) * ColTravelVector);
-						Vector b = a + ((1.0 / RowColPointCount) * RowTravelVector);
-						Vector c = b + ((1.0 / RowColPointCount) * ColTravelVector);
-						Vector d = a + ((1.0 / RowColPointCount) * ColTravelVector);
+						Vector a = RStartPoint + ((1.0 * C / RowColCount) * RowTravelVector);
+						Vector d = R2StartPoint + ((1.0 * C / RowColCount) * Row2TravelVector);
+						Vector b = a + ((1.0 / RowColCount) * RowTravelVector);
+						Vector c = d + ((1.0 / RowColCount) * Row2TravelVector);
+						
 
 						if ((R + C) % 2 == 0)
 						{
@@ -146,14 +155,14 @@ Bool SX_Map::CreateWorld(BaseDocument *doc, BaseObject *parent, const Int32 &Sea
 		}
 		else
 		{
-			std::vector<std::vector<Vector>> Polygons = CreatePolyList(World->m_Solids[i], SearchEpsilon);
-			for (int j = 0; j < Polygons.size(); j++) // for each face
+			GetVertices(World->m_Solids[i], SearchEpsilon);
+			for (int j = 0; j < World->m_Solids[i].Planes.size(); j++) // for each face
 			{
 				int it = 0;
-				for (it = 0; it < Polygons[j].size(); it++) // for each point
+				for (it = 0; it < World->m_Solids[i].Planes[j].vertices.size(); it++) // for each point
 				{
-					index.push_back(mod->AddPoint(newPoly, (Polygons[j])[it]));
-					points.push_back((Polygons[j])[it]);
+					index.push_back(mod->AddPoint(newPoly, (World->m_Solids[i].Planes[j].vertices[it])));
+					points.push_back(World->m_Solids[i].Planes[j].vertices[it]);
 				}
 				Int32 *padr = &index[index.size() - it];
 				mod->CreateNgon(newPoly, padr, it);

@@ -15,10 +15,10 @@ public:
 	Int32 id;
 	Float64 d;
 	Vector x, y, z, normal;
-
-	Bool IsDisp;
+	std::vector<Vector> vertices;
 
 	// Disp Section
+	Bool IsDisp;
 	Int32 power;
 	Vector startposition;
 	Float64 elevation;

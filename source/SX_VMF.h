@@ -17,9 +17,9 @@ std::vector<Vector>& ParseVectorArray(const String&);
 std::vector<Float32>& ParseFloatArray(const String&);
 std::vector<String>& ParseLines(const String&);
 void ClassBounds(std::vector<String>&, String, int&, int&);
-std::vector<std::vector<Vector>>& CreatePolyList(const SX_Solid&, const Int32&);
+void GetVertices(SX_Solid&, const Int32&);
 Bool VectorInList(const Vector&, const std::vector<Vector>&);
-std::vector<Vector>& OrderByAngle(const SX_Plane&,const std::vector<Vector>&);
+void OrderByAngle(SX_Plane&);
 Float32 Distance(const Vector&, const Vector&);
 std::vector<std::vector<Int32>>& FindLikePoints(const std::vector<Int32>&, const std::vector<Vector>&);
 

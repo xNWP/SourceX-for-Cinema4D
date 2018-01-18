@@ -107,7 +107,7 @@ Bool SX_MainUI::ImportVMF(Filename fn)
 	Int32 *SearchEpsilon = new Int32;
 	this->GetInt32(IDC_PLANE_SEARCH_EPSILON, *SearchEpsilon);
 	Map->CreateWorld(aDoc, root, *SearchEpsilon);
-	MessageDialog("HackedByDTUGEND");
+	MessageDialog("HeckedBySmiffEdits");
 	
 	// After Import, dealloc members
 	if (SearchEpsilon != nullptr)
