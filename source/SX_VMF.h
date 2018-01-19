@@ -1,3 +1,8 @@
+// Copyright (c) 2018 Brett Anthony. All rights reserved.
+//
+// This work is licensed under the terms of the MIT license.
+// For a copy, see <https://opensource.org/licenses/MIT>.
+
 // Defines various functions to aid in parsing vmf files.
 
 #ifndef SX_VMF_H
