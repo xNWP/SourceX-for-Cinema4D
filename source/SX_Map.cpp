@@ -104,11 +104,36 @@ Bool SX_Map::CreateWorld(BaseDocument *doc, BaseObject *parent, const Int32 &Sea
 
 					for (Int32 C = 0; C < RowColCount; C++) // For Each Col
 					{
+						// Calculate initial point locations.
 						Vector a = RStartPoint + ((1.0 * C / RowColCount) * RowTravelVector);
 						Vector d = R2StartPoint + ((1.0 * C / RowColCount) * Row2TravelVector);
 						Vector b = a + ((1.0 / RowColCount) * RowTravelVector);
 						Vector c = d + ((1.0 / RowColCount) * Row2TravelVector);
-						
+
+						// Apply displacement
+						a += World->m_Solids[i].Planes[j].elevation * World->m_Solids[i].Planes[j].normal // elevation
+							+ World->m_Solids[i].Planes[j].offsets[R][C] // offset
+							+ (World->m_Solids[i].Planes[j].distances[R][C] //
+							* (World->m_Solids[i].Planes[j].offset_normals[R][C] // final normal * dist
+							+ World->m_Solids[i].Planes[j].normals[R][C]).GetNormalized()); //
+
+						b += World->m_Solids[i].Planes[j].elevation * World->m_Solids[i].Planes[j].normal // elevation
+							+ World->m_Solids[i].Planes[j].offsets[R][C + 1] // offset
+							+ (World->m_Solids[i].Planes[j].distances[R][C + 1] //
+							* (World->m_Solids[i].Planes[j].offset_normals[R][C + 1] // final normal * dist
+							+ World->m_Solids[i].Planes[j].normals[R][C + 1]).GetNormalized()); //
+
+						c += World->m_Solids[i].Planes[j].elevation * World->m_Solids[i].Planes[j].normal // elevation
+							+ World->m_Solids[i].Planes[j].offsets[R + 1][C + 1] // offset
+							+ (World->m_Solids[i].Planes[j].distances[R + 1][C + 1] //
+							* (World->m_Solids[i].Planes[j].offset_normals[R + 1][C + 1] // final normal * dist
+							+ World->m_Solids[i].Planes[j].normals[R + 1][C + 1]).GetNormalized()); //
+
+						d += World->m_Solids[i].Planes[j].elevation * World->m_Solids[i].Planes[j].normal // elevation
+							+ World->m_Solids[i].Planes[j].offsets[R + 1][C] // offset
+							+ (World->m_Solids[i].Planes[j].distances[R + 1][C] //
+							* (World->m_Solids[i].Planes[j].offset_normals[R + 1][C] // final normal * dist
+							+ World->m_Solids[i].Planes[j].normals[R + 1][C]).GetNormalized()); //
 
 						if ((R + C) % 2 == 0)
 						{
