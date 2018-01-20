@@ -29,8 +29,8 @@ Bool SX_MainUI::InitValues()
 	if (!GeDialog::InitValues())
 		return false;
 
-
-	this->SetTitle(GeLoadString(IDS_PLUGIN_NAME) + " -- version " + GeLoadString(IDS_PLUGIN_VERSION));
+	String VersionTag = xstr(VERSION_TAG);
+	this->SetTitle(GeLoadString(IDS_PLUGIN_NAME) + " -- version " + xstr(VERSION_MAJOR) + "." + xstr(VERSION_MINOR) + (VersionTag == "0" ? "" : " " + VersionTag));
 	this->SetInt32(IDC_PLANE_SEARCH_EPSILON, -3, -8, 8, 1);
 
 	return true;

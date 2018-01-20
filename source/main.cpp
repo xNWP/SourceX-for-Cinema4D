@@ -18,7 +18,8 @@ Bool PluginStart()
 	{
 		SX_Register *dlg = new SX_Register();
 		RegisterCommandPlugin(ID_PLUGIN_ID, GeLoadString(IDS_PLUGIN_NAME), 0, nullptr, GeLoadString(IDS_PLUGIN_DESCRIPTION), dlg);
-		GePrint("Loaded " + GeLoadString(IDS_PLUGIN_NAME) + " " + GeLoadString(IDS_PLUGIN_VERSION));
+		String VersionTag = xstr(VERSION_TAG);
+		GePrint("Loaded " + GeLoadString(IDS_PLUGIN_NAME) + " v" + xstr(VERSION_MAJOR) + "." + xstr(VERSION_MINOR) + (VersionTag == "0" ? "" : " " + VersionTag));
 	}
 	catch (std::exception &ex)
 	{
